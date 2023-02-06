@@ -6,7 +6,8 @@ export interface IStatefullTable {
 }
 
 export class Table extends Construct {
-  public readonly table: aws_dynamodb.ITable;
+  public readonly table: aws_dynamodb.Table;
+
   constructor(scope: Construct, id: string, props: IStatefullTable) {
     super(scope, id);
 

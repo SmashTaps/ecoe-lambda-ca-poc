@@ -7,7 +7,7 @@ interface IStatefullProps extends cdk.StackProps {
 }
 
 export class Statefull extends cdk.Stack {
-  public readonly table: cdk.aws_dynamodb.ITable;
+  public readonly table: cdk.aws_dynamodb.Table;
 
   constructor(scope: Construct, id: string, props?: IStatefullProps) {
     super(scope, id, props);
