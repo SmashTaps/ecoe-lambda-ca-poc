@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 import "source-map-support/register";
 import * as cdk from "aws-cdk-lib";
-import { StatefullStack } from "../lib/statefull/statefull";
+import { CAPOCStatefullStack } from "../lib/statefull/statefull";
+import { CAPOCStatelessStack } from "../lib/stateless/stateless";
 
 const app = new cdk.App();
-new StatefullStack(app, "Statefull", {
+const statefullStack = new CAPOCStatefullStack(app, "CA-POC-Statefull", {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */
@@ -16,4 +17,9 @@ new StatefullStack(app, "Statefull", {
   // env: { account: '123456789012', region: 'us-east-1' },
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
   appName: "ca-poc",
+});
+
+new CAPOCStatelessStack(app, "CA-POC-Stateless", {
+  appName: "ca-poc",
+  table: statefullStack.table,
 });

@@ -12,16 +12,16 @@ export class Table extends Construct {
     super(scope, id);
 
     this.table = new aws_dynamodb.Table(this, `${props.appName}-table`, {
-      sortKey: {
-        name: "user#id",
+      partitionKey: {
+        name: "pk",
         type: aws_dynamodb.AttributeType.STRING,
       },
-      partitionKey: {
-        name: "user#id",
+      sortKey: {
+        name: "sk",
         type: aws_dynamodb.AttributeType.STRING,
       },
       billingMode: aws_dynamodb.BillingMode.PAY_PER_REQUEST,
-      removalPolicy: RemovalPolicy.RETAIN,
+      removalPolicy: RemovalPolicy.DESTROY,
     });
   }
 }

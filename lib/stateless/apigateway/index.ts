@@ -1,12 +1,13 @@
-import { aws_apigateway } from "aws-cdk-lib";
+import { aws_apigateway, aws_lambda } from "aws-cdk-lib";
 import { Construct } from "constructs";
+import { IAPI } from "./iapi";
 import { UserApi } from "./userApi";
 
-interface IAPIGatewayProps {
-  readonly appName: string;
+interface IAPIGatewayProps extends IAPI {
+  getLambda: aws_lambda.Function;
 }
 
-class APIGateway extends Construct {
+export class APIGateway extends Construct {
   public readonly userApi: aws_apigateway.RestApi;
 
   constructor(scope: Construct, id: string, props: IAPIGatewayProps) {
@@ -14,6 +15,7 @@ class APIGateway extends Construct {
 
     this.userApi = new UserApi(this, `${props.appName}-user-api`, {
       appName: props.appName,
+      getLambda: props.getLambda,
     }).userApi;
   }
 }
