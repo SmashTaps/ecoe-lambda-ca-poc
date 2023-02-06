@@ -1,5 +1,5 @@
-import { IUser } from "../entities/user";
+import { IUser } from "../entities";
 
 export interface IUserRepository {
-  save(user: IUser): Promise<void>;
+  save(user: IUser, tableName: string): Promise<void>;
 }
