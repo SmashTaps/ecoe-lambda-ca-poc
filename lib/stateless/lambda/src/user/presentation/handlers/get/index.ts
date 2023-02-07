@@ -1,29 +1,30 @@
-import {
-  APIGatewayEventRequestContext,
-  APIGatewayProxyEvent,
-  APIGatewayProxyResult,
-} from "aws-lambda";
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import {
   DataSource,
   getUserController,
 } from "../../controllers/userDataController";
-import { DynamoDB } from "aws-sdk";
+import {
+  DynamoDBClient,
+  GetItemCommand,
+  GetItemInput,
+} from "@aws-sdk/client-dynamodb";
+import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { IUser } from "../../../domain/entities/interfaces/user";
 
 export const handler = async function (
-  event: APIGatewayProxyEvent,
-  context: APIGatewayEventRequestContext
+  event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> {
-  if (!event.pathParameters || !event.pathParameters.id) {
+  if (!event.queryStringParameters || !event.queryStringParameters.id) {
     return {
       statusCode: 400,
       body: JSON.stringify({
         message: "Bad Request",
+        debug: event,
       }),
     };
   }
 
-  const id = event.pathParameters.id;
+  const id = event.queryStringParameters.id;
 
   try {
     if (!process.env.tableName) {
@@ -40,21 +41,27 @@ export const handler = async function (
 
     const dataSource: DataSource = {
       getUser: async (id: string) => {
-        const dynamoDb = new DynamoDB.DocumentClient();
-        const params = {
+        const dynamoDb = new DynamoDBClient({ region: "us-west-2" });
+
+        const params: GetItemInput = {
           TableName: tableName,
-          Key: { id },
+          Key: marshall({
+            pk: `USER#${id}`,
+            sk: `USER#${id}`,
+          }),
         };
 
-        const result = await dynamoDb.get(params).promise();
+        const result = await dynamoDb.send(new GetItemCommand(params));
 
         if (!result.Item) {
           return undefined;
         }
 
+        const data = unmarshall(result.Item);
+
         return {
-          pk: result.Item.pk,
-          sk: result.Item.sk,
+          pk: data.pk,
+          sk: data.sk,
         };
       },
     };
@@ -63,13 +70,14 @@ export const handler = async function (
 
     return {
       statusCode: 200,
-      body: JSON.stringify(user),
+      body: user ? JSON.stringify(user) : "No user found",
     };
   } catch (err: any) {
     return {
       statusCode: 500,
       body: JSON.stringify({
         message: err.message,
+        data: id,
       }),
     };
   }

@@ -14,12 +14,14 @@ export class CAPOCStatelessStack extends Stack {
 
     const lambdaConstruct = new LambdaFns(this, `${props.appName}-lambda-fns`, {
       appName: props.appName,
-      table: props.table,
+      tableName: props.table.tableName,
     });
 
     new APIGateway(this, `${props.appName}-api-gateway`, {
       appName: props.appName,
       getLambda: lambdaConstruct.getLambda,
     });
+
+    props.table.grantReadData(lambdaConstruct.getLambda);
   }
 }

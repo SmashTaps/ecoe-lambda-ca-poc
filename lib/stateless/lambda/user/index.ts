@@ -24,7 +24,7 @@ export class GetUserDataLambda extends Construct {
         ),
         handler: "index.handler",
         environment: {
-          TABLE_NAME: props.table.tableName,
+          tableName: props.tableName,
         },
       }
     );

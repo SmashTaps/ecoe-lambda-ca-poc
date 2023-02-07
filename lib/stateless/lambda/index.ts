@@ -1,10 +1,10 @@
 import { Construct } from "constructs";
-import { aws_lambda, aws_dynamodb } from "aws-cdk-lib";
+import { aws_lambda } from "aws-cdk-lib";
 import { GetUserDataLambda } from "./user";
 
 interface ILambdaFns {
   appName: string;
-  table: aws_dynamodb.Table;
+  tableName: string;
 }
 
 export class LambdaFns extends Construct {
@@ -18,7 +18,7 @@ export class LambdaFns extends Construct {
       `${props.appName}-lambda-construct`,
       {
         appName: props.appName,
-        table: props.table,
+        tableName: props.tableName,
       }
     ).lambda;
   }
