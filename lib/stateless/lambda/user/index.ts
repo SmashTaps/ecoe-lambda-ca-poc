@@ -17,7 +17,7 @@ export class GetUserDataLambda extends Construct {
       {
         runtime: aws_lambda.Runtime.NODEJS_18_X,
         code: aws_lambda.Code.fromAsset(
-          path.join(__dirname, "../src/user/get"),
+          path.join(__dirname, "../src/user/presentation/handlers/get"),
           {
             exclude: ["*.ts", "*.js.map"],
           }

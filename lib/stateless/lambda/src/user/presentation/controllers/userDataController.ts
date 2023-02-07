@@ -1,7 +1,7 @@
 import { IUser } from "../../domain/entities/interfaces/user";
 import { getUser } from "../../usecase/getUser";
 
-interface DataSource {
+export interface DataSource {
   getUser: (id: string) => Promise<IUser | undefined>;
 }
 
@@ -12,9 +12,9 @@ export const getUserController = async (id: string, dataSource: DataSource) => {
     });
 
     return user;
-  } catch (err) {
+  } catch (err: any) {
     console.error(err);
 
-    throw err;
+    return err.message;
   }
 };
