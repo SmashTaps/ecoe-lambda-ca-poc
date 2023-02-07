@@ -1,3 +1,4 @@
 export interface IUser {
-  id: string;
+  pk: string;
+  sk: string;
 }
