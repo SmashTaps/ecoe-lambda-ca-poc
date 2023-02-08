@@ -1,7 +1,11 @@
 import { IUser } from "../entities/user";
 import { IUserRepository } from "../repositories/userRepository";
 
-export class GetUserByIdUseCase {
+export interface IGetUserByIdUseCase {
+  execute(id: string): Promise<IUser | undefined>;
+}
+
+export class GetUserByIdUseCase implements IGetUserByIdUseCase {
   constructor(private userRespository: IUserRepository) {
     this.userRespository = userRespository;
   }

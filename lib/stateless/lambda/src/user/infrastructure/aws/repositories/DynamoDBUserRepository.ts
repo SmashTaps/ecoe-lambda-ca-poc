@@ -7,7 +7,7 @@ import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { IUser } from "../../../domain/entities/user";
 import { IUserRepository } from "../../../domain/repositories/userRepository";
 
-export class UserRepository implements IUserRepository {
+export class DynamoDBUserRepository implements IUserRepository {
   private dynamoDb: DynamoDBClient;
   private tableName: string;
 
