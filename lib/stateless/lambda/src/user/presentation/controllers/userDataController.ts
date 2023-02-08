@@ -1,11 +1,11 @@
 import { IUser } from "../../domain/entities/interfaces/user";
+import { IDataSource } from "../../infrastructure/interfaces/dataSource";
 import { getUser } from "../../usecase/getUser";
 
-export interface DataSource {
-  getUser: (id: string) => Promise<IUser | undefined>;
-}
-
-export const getUserController = async (id: string, dataSource: DataSource) => {
+export const getUserController = async (
+  id: string,
+  dataSource: IDataSource
+) => {
   try {
     const user = await getUser(id, {
       getUser: (id: string) => dataSource.getUser(id),

@@ -1,15 +1,8 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
-import {
-  DataSource,
-  getUserController,
-} from "../../controllers/userDataController";
-import {
-  DynamoDBClient,
-  GetItemCommand,
-  GetItemInput,
-} from "@aws-sdk/client-dynamodb";
-import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
+import { getUserController } from "../../controllers/userDataController";
 import { IUser } from "../../../domain/entities/interfaces/user";
+import { DynamoDBDataSource } from "../../../infrastructure/dynamodbDataSource";
+import { IDataSource } from "../../../infrastructure/interfaces/dataSource";
 
 export const handler = async function (
   event: APIGatewayProxyEvent
@@ -39,32 +32,7 @@ export const handler = async function (
 
     const tableName = process.env.tableName;
 
-    const dataSource: DataSource = {
-      getUser: async (id: string) => {
-        const dynamoDb = new DynamoDBClient({ region: "us-west-2" });
-
-        const params: GetItemInput = {
-          TableName: tableName,
-          Key: marshall({
-            pk: `USER#${id}`,
-            sk: `USER#${id}`,
-          }),
-        };
-
-        const result = await dynamoDb.send(new GetItemCommand(params));
-
-        if (!result.Item) {
-          return undefined;
-        }
-
-        const data = unmarshall(result.Item);
-
-        return {
-          pk: data.pk,
-          sk: data.sk,
-        };
-      },
-    };
+    const dataSource: IDataSource = new DynamoDBDataSource(tableName);
 
     const user: IUser = await getUserController(id, dataSource);
 
