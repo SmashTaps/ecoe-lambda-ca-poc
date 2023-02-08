@@ -25,9 +25,8 @@ export async function handler(
     };
   }
 
-  const getUserUseCase = new GetUserByIdUseCase(
-    new UserRepository(process.env.tableName)
-  );
+  const userRepository = new UserRepository(process.env.tableName);
+  const getUserUseCase = new GetUserByIdUseCase(userRepository);
 
   const user = await getUserUseCase.execute(event.queryStringParameters.id);
 
