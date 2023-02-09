@@ -1,4 +1,4 @@
-import { aws_dynamodb, aws_lambda, Stack, StackProps } from "aws-cdk-lib";
+import { aws_dynamodb, Stack, StackProps } from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { APIGateway } from "./apigateway";
 import { LambdaFns } from "./lambda";
