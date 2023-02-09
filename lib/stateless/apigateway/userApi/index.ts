@@ -4,6 +4,7 @@ import { IAPI } from "../iapi";
 
 export interface IAPIGatewayProps extends IAPI {
   getLambda: aws_lambda.Function;
+  saveLambda: aws_lambda.Function;
 }
 
 export class UserApi extends Construct {
@@ -30,6 +31,11 @@ export class UserApi extends Construct {
     this.userApiResource.addMethod(
       "GET",
       new aws_apigateway.LambdaIntegration(props.getLambda)
+    );
+
+    this.userApiResource.addMethod(
+      "POST",
+      new aws_apigateway.LambdaIntegration(props.saveLambda)
     );
   }
 }

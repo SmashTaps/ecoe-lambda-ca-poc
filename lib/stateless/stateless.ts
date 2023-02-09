@@ -20,8 +20,10 @@ export class CAPOCStatelessStack extends Stack {
     new APIGateway(this, `${props.appName}-api-gateway`, {
       appName: props.appName,
       getLambda: lambdaConstruct.getLambda,
+      saveLambda: lambdaConstruct.saveLambda,
     });
 
     props.table.grantReadData(lambdaConstruct.getLambda);
+    props.table.grantWriteData(lambdaConstruct.saveLambda);
   }
 }

@@ -30,3 +30,29 @@ export class GetUserDataLambda extends Construct {
     );
   }
 }
+
+export class SaveUserLambda extends Construct {
+  public readonly lambda: aws_lambda.Function;
+
+  constructor(scope: Construct, id: string, props: IGetUserDataLambdaProps) {
+    super(scope, id);
+
+    this.lambda = new aws_lambda.Function(
+      this,
+      `${props.appName}-save-user-data-lambda`,
+      {
+        runtime: aws_lambda.Runtime.NODEJS_18_X,
+        code: aws_lambda.Code.fromAsset(
+          path.join(__dirname, "../src/user/presentation/handlers/save"),
+          {
+            exclude: ["*.ts", "*.js.map"],
+          }
+        ),
+        handler: "index.handler",
+        environment: {
+          tableName: props.tableName,
+        },
+      }
+    );
+  }
+}

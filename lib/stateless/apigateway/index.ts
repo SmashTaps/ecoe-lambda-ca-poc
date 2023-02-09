@@ -5,6 +5,7 @@ import { UserApi } from "./userApi";
 
 interface IAPIGatewayProps extends IAPI {
   getLambda: aws_lambda.Function;
+  saveLambda: aws_lambda.Function;
 }
 
 export class APIGateway extends Construct {
@@ -16,6 +17,7 @@ export class APIGateway extends Construct {
     this.userApi = new UserApi(this, `${props.appName}-user-api`, {
       appName: props.appName,
       getLambda: props.getLambda,
+      saveLambda: props.saveLambda,
     }).userApi;
   }
 }
