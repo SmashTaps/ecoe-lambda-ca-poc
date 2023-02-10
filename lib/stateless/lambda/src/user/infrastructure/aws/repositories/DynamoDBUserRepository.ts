@@ -13,8 +13,10 @@ export class DynamoDBUserRepository implements IUserRepository {
   private dynamoDb: DynamoDBClient;
   private tableName: string;
 
-  constructor(tableName: string) {
-    this.dynamoDb = new DynamoDBClient({ region: "us-west-2" });
+  constructor(tableName: string, dynamodb?: DynamoDBClient) {
+    this.dynamoDb = dynamodb
+      ? dynamodb
+      : new DynamoDBClient({ region: "us-west-2" });
     this.tableName = tableName;
   }
 

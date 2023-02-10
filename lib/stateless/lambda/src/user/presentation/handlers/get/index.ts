@@ -1,6 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { DynamoDBUserRepository } from "../../../infrastructure/aws/repositories/DynamoDBUserRepository";
 import { GetUserByIdUseCase } from "../../../domain/useCases/getUserUseCase";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 
 export async function handler(
   event: APIGatewayProxyEvent
