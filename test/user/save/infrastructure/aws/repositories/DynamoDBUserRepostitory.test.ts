@@ -2,6 +2,8 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { IUser } from "../../../../../../lib/stateless/lambda/src/user/domain/entities/user";
 import { DynamoDBUserRepository } from "../../../../../../lib/stateless/lambda/src/user/infrastructure/aws/repositories/DynamoDBUserRepository";
 
+global.console.error = jest.fn();
+
 describe("DynamoDBUserRepository", () => {
   let dynamoDb: DynamoDBClient;
   let userRepository: DynamoDBUserRepository;
