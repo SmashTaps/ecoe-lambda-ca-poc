@@ -53,17 +53,17 @@ describe("DynamoDBUserRepository", () => {
   });
 
   describe("saveUser", () => {
+    const saveItem: IUser = {
+      pk: `USER#1`,
+      sk: `USER#1`,
+      firstName: "Sameera",
+      lastName: "Abeywickrama",
+    };
+
     it("returns the user if the user is saved", async () => {
       jest.spyOn(dynamoDb, "send").mockImplementation((command) => {
         return Promise.resolve(item);
       });
-
-      const saveItem: IUser = {
-        pk: `USER#1`,
-        sk: `USER#1`,
-        firstName: "Sameera",
-        lastName: "Abeywickrama",
-      };
 
       const result = await userRepository.saveUser(saveItem);
 
@@ -73,6 +73,14 @@ describe("DynamoDBUserRepository", () => {
         firstName: "Sameera",
         lastName: "Abeywickrama",
       });
+    });
+
+    it("throws if the dynamodb client rejects", async () => {
+      jest.spyOn(dynamoDb, "send").mockImplementation((command) => {
+        return Promise.reject(new Error("error"));
+      });
+
+      await expect(userRepository.saveUser(saveItem)).rejects.toThrow("error");
     });
   });
 });

@@ -63,16 +63,15 @@ export class DynamoDBUserRepository implements IUserRepository {
 
     try {
       await this.dynamoDb.send(new PutItemCommand(params));
+      return {
+        pk: user.pk,
+        sk: user.sk,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      };
     } catch (error) {
       console.error(error);
       throw error;
     }
-
-    return {
-      pk: user.pk,
-      sk: user.sk,
-      firstName: user.firstName,
-      lastName: user.lastName,
-    };
   }
 }
