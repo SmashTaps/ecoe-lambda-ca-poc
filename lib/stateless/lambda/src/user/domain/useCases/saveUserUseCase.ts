@@ -6,9 +6,7 @@ interface ISaveUserUseCase {
 }
 
 export class SaveUserUseCase implements ISaveUserUseCase {
-  constructor(private userRepository: IUserRepository) {
-    this.userRepository = userRepository;
-  }
+  constructor(private readonly userRepository: IUserRepository) {}
 
   async execute(user: IUser): Promise<IUser> {
     return this.userRepository.saveUser(user);

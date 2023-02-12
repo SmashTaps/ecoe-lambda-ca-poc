@@ -6,9 +6,7 @@ export interface IGetUserByIdUseCase {
 }
 
 export class GetUserByIdUseCase implements IGetUserByIdUseCase {
-  constructor(private userRespository: IUserRepository) {
-    this.userRespository = userRespository;
-  }
+  constructor(private readonly userRespository: IUserRepository) {}
 
   async execute(id: string): Promise<IUser | undefined> {
     return await this.userRespository.getUserById(id);

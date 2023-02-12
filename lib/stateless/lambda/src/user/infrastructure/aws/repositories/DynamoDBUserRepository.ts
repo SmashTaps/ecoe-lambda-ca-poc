@@ -11,13 +11,11 @@ import { IUserRepository } from "../../../domain/repositories/userRepository";
 
 export class DynamoDBUserRepository implements IUserRepository {
   private dynamoDb: DynamoDBClient;
-  private tableName: string;
 
-  constructor(tableName: string, dynamodb?: DynamoDBClient) {
+  constructor(private readonly tableName: string, dynamodb?: DynamoDBClient) {
     this.dynamoDb = dynamodb
       ? dynamodb
       : new DynamoDBClient({ region: "us-west-2" });
-    this.tableName = tableName;
   }
 
   public async getUserById(id: string): Promise<IUser | undefined> {
