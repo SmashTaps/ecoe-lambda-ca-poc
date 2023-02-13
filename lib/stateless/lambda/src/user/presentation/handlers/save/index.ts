@@ -1,7 +1,11 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
-import { IUser } from "../../../domain/entities/user";
+import { IUser, User } from "../../../domain/entities/user";
 import { SaveUserUseCase } from "../../../domain/useCases/saveUserUseCase";
 import { DynamoDBUserRepository } from "../../../infrastructure/aws/repositories/DynamoDBUserRepository";
+
+function Log(target: any) {
+  console.log("logging...");
+}
 
 export async function handler(
   event: APIGatewayProxyEvent
@@ -28,12 +32,12 @@ export async function handler(
   }
 
   try {
-    const user: IUser = {
+    const user = new User({
       pk: `USER#${data.id}`,
       sk: `USER#${data.id}`,
       firstName: data.firstName,
       lastName: data.lastName,
-    };
+    });
 
     const userRespository = new DynamoDBUserRepository(process.env.tableName);
     const saveUserUseCase = new SaveUserUseCase(userRespository);
