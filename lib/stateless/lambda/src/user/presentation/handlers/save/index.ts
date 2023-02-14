@@ -3,10 +3,6 @@ import { IUser, User } from "../../../domain/entities/user";
 import { SaveUserUseCase } from "../../../domain/useCases/saveUserUseCase";
 import { DynamoDBUserRepository } from "../../../infrastructure/aws/repositories/DynamoDBUserRepository";
 
-function Log(target: any) {
-  console.log("logging...");
-}
-
 export async function handler(
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> {
