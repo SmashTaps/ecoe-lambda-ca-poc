@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
-import { IUser, User } from "../../../domain/entities/user";
+import { User } from "../../../domain/entities/user";
 import { SaveUserUseCase } from "../../../domain/useCases/saveUserUseCase";
 import { DynamoDBUserRepository } from "../../../infrastructure/aws/repositories/DynamoDBUserRepository";
 
@@ -34,6 +34,12 @@ export async function handler(
       firstName: data.firstName,
       lastName: data.lastName,
     });
+
+    // const userSavedEvent = new UserSavedEvent({
+    //   eventId: data.Id,
+    //   eventType: "UserSaved",
+    //   data: user,
+    // });
 
     const userRespository = new DynamoDBUserRepository(process.env.tableName);
     const saveUserUseCase = new SaveUserUseCase(userRespository);
