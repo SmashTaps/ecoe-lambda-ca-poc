@@ -5,10 +5,21 @@ import { GetUserByIdUseCase } from "../../../../../lib/stateless/lambda/src/user
 describe("GetUserByIdUseCase", () => {
   let userRepositoryMock: IUserRepository;
   let useCase: GetUserByIdUseCase;
+  const expectedUser: IUser = {
+    pk: "pk",
+    sk: "sk",
+    firstName: "John",
+    lastName: "Doe",
+  };
 
   beforeEach(() => {
     userRepositoryMock = {
-      getUserById: jest.fn(),
+      getUserById: jest.fn().mockImplementation((id) => {
+        if (id === "121") {
+          return expectedUser;
+        }
+        return undefined;
+      }),
       saveUser: jest.fn(),
     };
 
@@ -16,19 +27,10 @@ describe("GetUserByIdUseCase", () => {
   });
 
   it("should return a user if it exists", async () => {
-    const expectedUser: IUser = {
-      pk: "pk",
-      sk: "sk",
-      firstName: "John",
-      lastName: "Doe",
-    };
-
-    userRepositoryMock.getUserById("124");
-
-    const result = await useCase.execute("124");
-
+    userRepositoryMock.getUserById("121");
+    const result = await useCase.execute("121");
     expect(result).toEqual(expectedUser);
-    expect(userRepositoryMock.getUserById).toHaveBeenCalledWith("124");
+    expect(userRepositoryMock.getUserById).toHaveBeenCalledWith("121");
   });
 
   it("should return undefined if the user does not exist", async () => {

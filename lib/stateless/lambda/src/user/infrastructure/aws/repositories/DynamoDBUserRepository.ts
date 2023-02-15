@@ -34,13 +34,13 @@ export class DynamoDBUserRepository implements IUserRepository {
         return undefined;
       }
 
-      const data = unmarshall(result.Item);
+      const { pk, sk, firstName, lastName } = unmarshall(result.Item);
 
       return {
-        pk: data.pk,
-        sk: data.sk,
-        firstName: data.firstName,
-        lastName: data.lastName,
+        pk,
+        sk,
+        firstName,
+        lastName,
       };
     } catch (error) {
       console.error(error);
@@ -48,24 +48,29 @@ export class DynamoDBUserRepository implements IUserRepository {
     }
   }
 
-  public async saveUser(user: IUser): Promise<IUser> {
+  public async saveUser({
+    pk,
+    sk,
+    firstName,
+    lastName,
+  }: IUser): Promise<IUser> {
     const params: PutItemCommandInput = {
       TableName: this.tableName,
       Item: marshall({
-        pk: user.pk,
-        sk: user.sk,
-        firstName: user.firstName,
-        lastName: user.lastName,
+        pk,
+        sk,
+        firstName,
+        lastName,
       }),
     };
 
     try {
       await this.dynamoDb.send(new PutItemCommand(params));
       return {
-        pk: user.pk,
-        sk: user.sk,
-        firstName: user.firstName,
-        lastName: user.lastName,
+        pk,
+        sk,
+        firstName,
+        lastName,
       };
     } catch (error) {
       console.error(error);
